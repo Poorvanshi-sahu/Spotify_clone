@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Song = require("../models/Song");
+const User = require("../models/User");
 const authenticate = require("../middlware/auth");
 
 //Song creation by login user
@@ -40,26 +41,28 @@ router.get("/getMyAllSongs", authenticate, async(req, res)=>{
 module.exports = router;
 
 // Get all the songs by artist
-router.get('/get/artistSong', authenticate, async(req, res)=>{
-    const artistId = req.body;
+router.get('/get/artistSong/:artistId', authenticate, async(req, res)=>{
+    const artistId = req.params.artistId ;
 
-    const userExist = await User.find({_id:artistId});
+    const userExist = await User.findOne({_id:artistId});
      if(!userExist){
-        res.status(404).json({"message":"User does not exist"})
+        return res.status(404).json({"message":"User does not exist"})
     }
 
     const allSongOfArtist = await Song.find({artist:artistId});
-    if(!allSongOfArtist){
-        res.status(300).json({"message":"No songs Present"})
+    if(!allSongOfArtist.length){
+        return res.status(300).json({"message":"No songs Present"})
     }
+
+    return res.status(200).json({allSongOfArtist});
 })
 
 // Get song by songName
-router.get("/get/songName",authenticate,async(req,res)=>{
-    const songName = req.body;
+router.get("/get/songName/:songName", authenticate, async(req,res)=>{
+    const songName = req.params.songName;
 
     if(!songName){
-        res.status(301).json({"message":"Song name is not present"})
+        return res.status(301).json({"message":"Song name is not present"})
     }
 
     var regexPattern = songName.split('').join('.*');
@@ -71,8 +74,7 @@ router.get("/get/songName",authenticate,async(req,res)=>{
     });
 
     if(!song){
-        res.status(401).json({message:"Song not present"});
+        return res.status(401).json({message:"Song not present"});
     }
-
-    res.status(200).json(song);
+    return res.status(200).json({data:song});
 })

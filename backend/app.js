@@ -7,6 +7,7 @@ const bcrypt=require('bcrypt');
 const bodyParser = require('body-parser');
 const authRoutes=require("./routes/auth");
 const songRoutes = require("./routes/song");
+const playListRoutes = require("./routes/playlist");
 
 // app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -18,6 +19,7 @@ app.get('/',(req,res)=>{
 // Set up of routes
 app.use('/auth', authRoutes);
 app.use('/song', songRoutes);
+app.use("/playList",playListRoutes);
 
 app.post('/login',async(req,res)=>{
     const {email,password}=req.body;

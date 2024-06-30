@@ -34,7 +34,7 @@ userSchema.pre("save",async function(next){
 
 userSchema.methods.generateToken=function(){
     const token=jwt.sign({_id:this._id},process.env.SECRET_CODE,{
-        expiresIn:'1hr'
+        expiresIn:'24hr'
     })
     return token;
 }
