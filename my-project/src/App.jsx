@@ -5,7 +5,7 @@ import { LoginComponent, RegisterComponent } from "../src/index";
 
 function App() {
   return (
-    <div className="h-screen w-screen">
+    <div className="h-screen w-screen font-poppins">
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginComponent />} />
